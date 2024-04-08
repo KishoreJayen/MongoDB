@@ -1,0 +1,110 @@
+2.
+db.Employe.aggregate([
+  {
+    $lookup: {
+      from: "Personal",
+      localField: "_id",
+      foreignField: "_id",
+      as: "personal_info"
+    }
+  }
+]);
+{
+  _id: '101',
+  emp_name: 'John Smith',
+  role: 'Team member',
+  salary: '40000',
+  personal_info: []
+}
+{
+  _id: '102',
+  emp_name: 'Mark Antony',
+  role: 'Team leader',
+  salary: '50000',
+  personal_info: []
+}
+
+3.
+db.Employe.updateOne(
+  { "_id": "103" },
+  { $set: { "salary": "65000" } }
+);
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+
+
+4.
+db.Employe.find({ "salary": { $gt: "40000" } });
+
+{
+  _id: '102',
+  emp_name: 'Mark Antony',
+  role: 'Team leader',
+  salary: '50000'
+}
+{
+  _id: '103',
+  emp_name: 'Jane Bloggs',
+  role: 'Project leader',
+  salary: '65000'
+}
+
+
+5.
+db.Employe.find({ "_id": { $in: ["103", "104"] } });
+{
+  _id: '103',
+  emp_name: 'Jane Bloggs',
+  role: 'Project leader',
+  salary: '65000'
+}
+{
+  _id: '104',
+  emp_name: 'Susan Zin',
+  role: 'intern',
+  salary: '15000'
+}
+
+6.
+db.Employe.find({ "salary": { $lte: "50000" } }).sort({ "emp_name": 1 });
+
+{
+  _id: '101',
+  emp_name: 'John Smith',
+  role: 'Team member',
+  salary: '40000'
+}
+{
+  _id: '102',
+  emp_name: 'Mark Antony',
+  role: 'Team leader',
+  salary: '50000'
+}
+{
+  _id: '104',
+  emp_name: 'Susan Zin',
+  role: 'intern',
+  salary: '15000'
+}
+
+7.
+db.Employe.find({}, { "role": 1, "_id": 0 });
+{
+  role: 'Team member'
+}
+{
+  role: 'Team leader'
+}
+{
+  role: 'Project leader'
+}
+{
+  role: 'intern'
+}
+
+
